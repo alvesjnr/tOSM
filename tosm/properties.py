@@ -1,7 +1,7 @@
 
 import types
 
-# from exceptions import AbstractClassError, NotImplementedMethodError, KeylessArgError, NotAllowedArgument
+from exceptions import KeylessArgError, NotAllowedArgument, InvalidKeyValueError
 
 
 class _BaseProperty(object):
@@ -119,15 +119,14 @@ if __name__ == '__main__':
 
     for i in range(10):
         def validator(value):
-            print 'flskj',value
             if value%2:
                 raise BaseException("not even!")
 
         try:
             class A(object):
-                a = IntegerProperty(min=i, max=7, validator=validator)
+                a = IntegerProperty(max=7, validator=validator)
             aa = A()
-            aa.a = 5
+            aa.a = i
         except BaseException as b:
             print 'pff on: ',i, b
         
