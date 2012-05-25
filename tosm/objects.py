@@ -29,7 +29,7 @@ class Tobj(object):
         
         self._set_consecutive_arguments(args)
 
-        for key,value in kwargs:
+        for key,value in kwargs.items():
             if key in self._tosm_properties:
                 setattr(self, key, value)
             else:
