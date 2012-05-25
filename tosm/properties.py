@@ -12,9 +12,9 @@ class _BaseProperty(object):
         
         if args:
             raise KeylessArgError()
-        
-        for key,value in kwargs:
-            if key in _allowed_args:
+
+        for key,value in kwargs.items():
+            if key in self._allowed_args:
                 setattr(self, "_key_"+key, value)
             else:
                 raise NotAllowedArgument()
@@ -82,6 +82,12 @@ class IntegerProperty(_BaseProperty):
         if not isinstance(value, types.IntType):
             raise InvalidArgument()
 
+        if hasattr(self, '_key_max') and value > self._key_max:
+            raise InvalidArgument()
+
+        if hasattr(self, '_key_min') and value < self._key_min:
+            raise InvalidArgument()
+
     def _key_meta_validation(self):
 
         if hasattr(self, '_key_max') and hasattr(self, '_key_min'):
@@ -98,12 +104,6 @@ class PositiveIntegerProperty(IntegerProperty):
         if value < 0:
             raise InvalidArgument()
 
-        if hasattr(self, '_key_max') and value > self._key_max:
-            raise InvalidArgument()
-
-        if hasattr(self, '_key_min') and value < self._key_min:
-            raise InvalidArgument()
-
     def _key_meta_validation(self):
 
         super(PositiveIntegerProperty, self)._key_meta_validation()
@@ -117,8 +117,17 @@ class PositiveIntegerProperty(IntegerProperty):
 
 if __name__ == '__main__':
 
-    class A(object):
-        a = IntegerProperty()
+    for i in range(10):
+        def validator(value):
+            print 'flskj',value
+            if value%2:
+                raise BaseException("not even!")
 
-    aa = A()
-    aa.a = '10'
+        try:
+            class A(object):
+                a = IntegerProperty(min=i, max=7, validator=validator)
+            aa = A()
+            aa.a = 5
+        except BaseException as b:
+            print 'pff on: ',i, b
+        
