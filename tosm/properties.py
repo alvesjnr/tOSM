@@ -1,10 +1,12 @@
 
+import types
+
 # from exceptions import AbstractClassError, NotImplementedMethodError, KeylessArgError, NotAllowedArgument
 
 
 class _BaseProperty(object):
     
-    _allowed_args = ["doc","validation"]
+    _allowed_args = ['doc','validator']
 
     def __init__(self, default=None, *args, **kwargs):
         
@@ -16,9 +18,13 @@ class _BaseProperty(object):
                 setattr(self, "_key_"+key, value)
             else:
                 raise NotAllowedArgument()
+        
+        self._key_meta_validation()
 
         if default:
-            self._set_value(default)
+            self._validate(default)
+            self._implicid_validation(default)
+            self._default_value = default
 
     def _implicid_validation(self, value):
         """
@@ -33,51 +39,86 @@ class _BaseProperty(object):
             The validate function is a wrapper to the externally provided
             validation function
         """
-        if hasattr(self,"validation"):
-            self.validation(value)
+        if hasattr(self,"_key_validator"):
+            self._key_validator(value)
 
     def __get__(self, instance, cls):
-        return getattr(instance, self.attr_name)
+        
+        if hasattr(instance, self.attr_name):
+            return getattr(instance, self.attr_name)
+        elif hasattr(instance, _default_value):
+            return instance._default_value
+
 
     def __set__(self, instance, value):
+        self._implicid_validation(value)
+        self._validate(value)
         for attr_name, attr_value in instance.__class__.__dict__.items():
             if attr_value == self:
                 self.attr_name = '_attributename_'+attr_name
                 setattr(instance, self.attr_name, value)
                 break
-
-    def _set_value(self, value):
+    
+    def _key_meta_validation(self):
         """
-            Set the value inside the property.
-            This function is internally called by the __set__ method after
-            a validation.
+            This method valid if the key arguments are valid as keys
+            For instance, if checks if key max isn't less or equal than key min
         """
-        self._implicid_validation(value)
-        self._validate(value)
-        setattr(self, self.attr_name, value)
 
 class StringProperty(_BaseProperty):
 
-    def __init__(self,**kwargs):
-        pass
+    def _implicid_validation(self, value):
+
+        if not isinstance(value, basestring):
+            raise InvalidArgument()
 
 
 class IntegerProperty(_BaseProperty):
 
-    def __init__(self,**kwargs):
-        pass    
+    _allowed_args = _BaseProperty._allowed_args + ['min', 'max']
+
+    def _implicid_validation(self, value):
+        
+        if not isinstance(value, types.IntType):
+            raise InvalidArgument()
+
+    def _key_meta_validation(self):
+
+        if hasattr(self, '_key_max') and hasattr(self, '_key_min'):
+            if self._key_max <= self._key_min:
+                raise InvalidKeyValueError()
 
 
 class PositiveIntegerProperty(IntegerProperty):
 
-    def __init__(self,**kwargs):
-        pass
+    def _implicid_validation(self, value):
 
-if __name__=='__main__':
+        super(PositiveIntegerProperty,self)._implicid_validation(value)
+        
+        if value < 0:
+            raise InvalidArgument()
+
+        if hasattr(self, '_key_max') and value > self._key_max:
+            raise InvalidArgument()
+
+        if hasattr(self, '_key_min') and value < self._key_min:
+            raise InvalidArgument()
+
+    def _key_meta_validation(self):
+
+        super(PositiveIntegerProperty, self)._key_meta_validation()
+
+        if hasattr(self,_key_min) and self._key_min < 0:
+            raise InvalidKeyValueError()
+        
+        if hasattr(self, _key_max) and self._key_max < 0:
+            raise InvalidKeyValueError()
+
+
+if __name__ == '__main__':
+
     class A(object):
-        a = _BaseProperty()
+        a = IntegerProperty()
 
-    a = A()
-    a.a = 10
-    import pdb; pdb.set_trace()
-    print a.a
+    aa = A()
+    aa.a = '10'
