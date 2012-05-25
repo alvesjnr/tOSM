@@ -1,7 +1,17 @@
 
 import types
 
-from exceptions import KeylessArgError, NotAllowedArgument, InvalidKeyValueError
+from t_exceptions import KeylessArgError, NotAllowedArgument, InvalidKeyValueError, InvalidArgument
+
+
+class NumberedProperty(object):
+    
+    counter = 0
+
+    @classmethod
+    def get_counter_and_increment(cls):
+        cls.counter += 1
+        return cls.counter
 
 
 class _BaseProperty(object):
@@ -9,6 +19,8 @@ class _BaseProperty(object):
     _allowed_args = ['doc','validator']
 
     def __init__(self, default=None, *args, **kwargs):
+
+        self._property_index = NumberedProperty.get_counter_and_increment()
         
         if args:
             raise KeylessArgError()
