@@ -1,7 +1,8 @@
 
 import types
 
-from t_exceptions import KeylessArgError, NotAllowedArgument, InvalidKeyValueError, InvalidArgument
+from t_exceptions import *
+# from objects import Tobj
 
 
 class NumberedProperty(object):
@@ -77,6 +78,7 @@ class _BaseProperty(object):
             For instance, if checks if key max isn't less or equal than key min
         """
 
+
 class StringProperty(_BaseProperty):
 
     def _implicid_validation(self, value):
@@ -127,18 +129,11 @@ class PositiveIntegerProperty(IntegerProperty):
             raise InvalidKeyValueError()
 
 
-if __name__ == '__main__':
+class ObjectProperty(_BaseProperty):
 
-    for i in range(10):
-        def validator(value):
-            if value%2:
-                raise BaseException("not even!")
+    def _implicid_validation(self, value):
+        pass
+        # if not isinstance(value, Tobj):
+        #   raise InvalidArgument()
 
-        try:
-            class A(object):
-                a = IntegerProperty(max=7, validator=validator)
-            aa = A()
-            aa.a = i
-        except BaseException as b:
-            print 'pff on: ',i, b
-        
+

@@ -1,24 +1,7 @@
 
-from properties import _BaseProperty
+from meta_obj import TobjMetaclass
 
-
-class TobjMetaclass(type):
-
-    def __new__(cls, name, bases, dct):
-
-        prop = {}
-        consecutive = []
-        for key,value in dct.items():
-            if isinstance(value, _BaseProperty):
-                prop[key] = (value.__class__, value._property_index)
-                consecutive.append((value._property_index,key))
-
-        consecutive.sort(key=lambda a : a[0])
-        dct.update({'_tosm_properties': prop,
-                    '_consecutive_arguments': [name for i,name in consecutive],
-                    })
-
-        return super(TobjMetaclass, cls).__new__(cls, name, bases, dct)
+from t_exceptions import *
 
 
 class Tobj(object):
@@ -54,17 +37,3 @@ class Tobj(object):
         """ 
             Recreate a tOSM object based on a structure
         """
-        
-
-if __name__ == '__main__':
-
-    from properties import IntegerProperty, StringProperty
-
-    class A(Tobj):
-
-        b = IntegerProperty()
-        a = StringProperty()
-
-    a = A(1,'2')
-
-    a.dump()
