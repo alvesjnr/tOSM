@@ -126,19 +126,3 @@ class PositiveIntegerProperty(IntegerProperty):
         if hasattr(self, _key_max) and self._key_max < 0:
             raise InvalidKeyValueError()
 
-
-if __name__ == '__main__':
-
-    for i in range(10):
-        def validator(value):
-            if value%2:
-                raise BaseException("not even!")
-
-        try:
-            class A(object):
-                a = IntegerProperty(max=7, validator=validator)
-            aa = A()
-            aa.a = i
-        except BaseException as b:
-            print 'pff on: ',i, b
-        

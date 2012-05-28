@@ -54,17 +54,3 @@ class Tobj(object):
         """ 
             Recreate a tOSM object based on a structure
         """
-        
-
-if __name__ == '__main__':
-
-    from properties import IntegerProperty, StringProperty
-
-    class A(Tobj):
-
-        b = IntegerProperty()
-        a = StringProperty()
-
-    a = A(1,'2')
-
-    a.dump()
