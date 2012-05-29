@@ -120,10 +120,10 @@ class PositiveIntegerProperty(IntegerProperty):
 
         super(PositiveIntegerProperty, self)._key_meta_validation()
 
-        if hasattr(self,_key_min) and self._key_min < 0:
+        if hasattr(self,'_key_min') and self._key_min < 0:
             raise InvalidKeyValueError()
         
-        if hasattr(self, _key_max) and self._key_max < 0:
+        if hasattr(self, '_key_max') and self._key_max < 0:
             raise InvalidKeyValueError()
 
 
