@@ -1,6 +1,8 @@
 
 import unittest
-from properties import _BaseProperty
+from tosm.properties import _BaseProperty
+from tosm.properties import *
+from tosm.objects import Tobj
 
 
 class TestBaseProperty(unittest.TestCase):
@@ -9,10 +11,10 @@ class TestBaseProperty(unittest.TestCase):
         A = self.get_class_a()
         a = A()
         a.a = 10
-        self.assertTrue(isinstance(a.a, _BaseProperty))
+        self.assertTrue(isinstance(a.__class__.__dict__['a'], _BaseProperty))
 
     def test_b_default_value(self):
-        B = get_class_with_default()
+        B = self.get_class_with_default()
         b = B()
         self.assertTrue(b.b == 10)
 
@@ -20,7 +22,7 @@ class TestBaseProperty(unittest.TestCase):
         pass
 
     def test_d_doc(self):
-        D = get_class_with_doc()
+        D = self.get_class_with_doc()
         d = D()
         self.assertTrue(d.d.doc == "Yes, this is doc!") #FIXME!!!
     
@@ -52,9 +54,29 @@ class TestBaseProperty(unittest.TestCase):
 
         return D
 
+
 class TestIntegerProperty(unittest.TestCase):
 
-    pass
+    @staticmethod
+    def get_class():
+        class A(Tobj):
+            value = IntegerProperty()
+
+        return A
+
+    def test_a_integer_property(self):
+        a = self.get_class()(10)
+        self.assertTrue(a.value == 10)
+
+    def test_b_dump(self):
+        a = self.get_class()(10)
+        self.assertTrue(a.dump() == {'value': 10})
+
+    def test_b_load(self):
+        A = self.get_class()
+        a = A.load({'value':88})
+        self.assertTrue(a.value == 88)
+
 
 if __name__ == '__main__':
     unittest.main()
