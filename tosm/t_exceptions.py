@@ -22,3 +22,6 @@ class ArgumentsArithmError(_BaseTosmException):
 
 class InvalidArgument(_BaseTosmException):
     """ Your argument is invalid """
+
+class UnexpectedArgumentError(_BaseTosmException):
+	""" Some argument was not expected """

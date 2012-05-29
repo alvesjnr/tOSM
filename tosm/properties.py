@@ -65,6 +65,7 @@ class _BaseProperty(object):
     def __set__(self, instance, value):
         self._implicid_validation(value)
         self._validate(value)
+
         for attr_name, attr_value in instance.__class__.__dict__.items():
             if attr_value == self:
                 self.attr_name = '_attributename_'+attr_name

@@ -1,5 +1,6 @@
 
 from properties import _BaseProperty, ObjectProperty, ListProperty
+from t_exceptions import UnexpectedArgumentError
 
 
 class _TobjMetaclass(type):
@@ -14,8 +15,19 @@ class _TobjMetaclass(type):
                 consecutive.append((value._property_index,key))
 
         consecutive.sort(key=lambda a : a[0])
+
+        #FIXME: The idea works, but PLEASE: refactory it!
+        parent_classes_properties = {}
+        parent_classes_arguments = []
+        for base in bases:
+            if hasattr(base, '_consecutive_arguments'):
+                parent_classes_arguments += base._consecutive_arguments
+            if hasattr(base, '_tosm_properties'):
+                parent_classes_properties.update(base._tosm_properties)
+
+        prop.update(parent_classes_properties)
         dct.update({'_tosm_properties': prop,
-                    '_consecutive_arguments': [name for i,name in consecutive],
+                    '_consecutive_arguments': parent_classes_arguments + [name for i,name in consecutive],
                     })
 
         return super(_TobjMetaclass, cls).__new__(cls, name, bases, dct)
@@ -33,7 +45,8 @@ class Tobj(object):
             if key in self._tosm_properties:
                 setattr(self, key, value)
             else:
-                raise UnexpectedArgumentError()
+                import pdb; pdb.set_trace()
+                raise UnexpectedArgumentError(key)
 
     def _set_consecutive_arguments(self, args):
         
