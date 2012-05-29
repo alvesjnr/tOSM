@@ -45,7 +45,6 @@ class Tobj(object):
             if key in self._tosm_properties:
                 setattr(self, key, value)
             else:
-                import pdb; pdb.set_trace()
                 raise UnexpectedArgumentError(key)
 
     def _set_consecutive_arguments(self, args):
