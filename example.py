@@ -1,5 +1,5 @@
 """
-    tOSM - tinny object to structure modeller 
+    tOSM - tiny object to structure modeller 
     generic example of use
 """
 
