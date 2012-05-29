@@ -58,7 +58,7 @@ class _BaseProperty(object):
         
         if hasattr(instance, self.attr_name):
             return getattr(instance, self.attr_name)
-        elif hasattr(instance, _default_value):
+        elif hasattr(instance, '_default_value'):
             return instance._default_value
 
 
@@ -129,9 +129,19 @@ class PositiveIntegerProperty(IntegerProperty):
 
 class ObjectProperty(_BaseProperty):
 
+    def __set__(self, instance, value):
+        
+        super(ObjectProperty, self).__set__(instance, value)
+
+        self._object_definition = type(value)
+
     def _implicid_validation(self, value):
         
         from objects import Tobj    #FIXME: inside-objects imports are not a good idea!
         
         if not isinstance(value, Tobj):
             raise InvalidArgument()
+
+
+class ObjectListProperty(_BaseProperty):
+    pass

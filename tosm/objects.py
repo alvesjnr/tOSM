@@ -1,5 +1,5 @@
 
-from properties import _BaseProperty, ObjectProperty
+from properties import _BaseProperty, ObjectProperty, ObjectListProperty
 
 
 class _TobjMetaclass(type):
@@ -67,4 +67,25 @@ class Tobj(object):
         """ 
             Recreate a tOSM object based on a structure
         """
-        
+        tobj = cls()
+
+        for key,value in raw.items():
+            if key in tobj._tosm_properties:
+
+                meta_obj = cls.__getattribute__(cls,key)
+                
+                if isinstance(meta_obj, ObjectProperty):
+                    obj_class = meta_obj._object_definition
+                    obj = obj_class.load(value)
+                    setattr(tobj, key, obj)
+
+                elif isinstance(meta_obj, ObjectListProperty):
+                    pass
+                
+                else:
+                    setattr(tobj, key, value)
+            
+            else:
+                raise UnexpectedArgumentError()
+
+        return tobj
