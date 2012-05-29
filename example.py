@@ -4,7 +4,7 @@
 """
 
 from tosm.objects import Tobj
-from tosm.properties import IntegerProperty, StringProperty
+from tosm.properties import IntegerProperty, StringProperty, PositiveIntegerProperty, ObjectProperty
 
 class A(Tobj):
 
@@ -28,3 +28,28 @@ try:
     A(12,"34") #similar to 'b = A("Cavaco", 1999)' above, but in a wrong order
 except:
     print "Order matters!"
+
+
+"""
+    A more complex example
+"""
+
+class Person(Tobj):
+    name = StringProperty()
+    tel = PositiveIntegerProperty()
+    address = ObjectProperty()
+
+
+class Address(Tobj):
+    street = StringProperty()
+    number = PositiveIntegerProperty()
+
+carlos = Person("Carlos", 99887766, Address(number=99, street="Koningstraat"))
+
+dumped = carlos.dump()
+print dumped
+
+recreated_carlos = Person.load(dumped)
+
+print recreated_carlos.dump()
+
