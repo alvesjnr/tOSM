@@ -143,16 +143,37 @@ class ObjectProperty(_BaseProperty):
             raise InvalidArgument()
 
 
+
+class _TosmList(list):
+    
+    def __init__(self, *args, **kwargs):
+        if 'content_type' in kwargs:
+            t = kwargs.pop('content_type')
+            self._content_type = t
+        else:
+            self._content_type = object
+        super(_TosmList, self).__init__(args,*kwargs)
+    
+    def append(self, value):
+        if hasattr(self, '_content_type'):
+            if not isinstance(value, self._content_type):
+                raise InvalidArgument()
+        super(_TosmList, self).append(value)
+
+
 class ListProperty(_BaseProperty):
 
     _allowed_args = _BaseProperty._allowed_args + ['content_type',]
+
+    def __set__(self, instance, value):
+        if hasattr(self, '_key_content_type'):
+            value = _TosmList(*value, content_type=self._key_content_type)
+        super(ListProperty, self).__set__(instance, value)
     
     def _implicid_validation(self, value):
 
         if not isinstance(value, list):
             raise InvalidArgument()
-
-        #TODO: how to check list content?
 
         if hasattr(self, '_key_content_type') and value:
             if not all(map(lambda obj : isinstance(obj, self._key_content_type), value)):
@@ -164,7 +185,8 @@ def ObjectListProperty(*kwargs):
 
 
 def DefinedObjectListProperty(tobject, *kwargs):
-    if isinstance(tobject, ObjectProperty):
+    from objects import Tobj
+    if issubclass(tobject, Tobj):
         return ListProperty(content_type=tobject, *kwargs)
     else:
         raise InvalidArgument()

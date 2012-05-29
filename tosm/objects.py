@@ -57,6 +57,14 @@ class Tobj(object):
 
                 if isinstance(obj, Tobj):
                     d[arg] = obj.dump()
+                elif isinstance(obj,list):
+                    if obj:
+                        if isinstance(obj[0], Tobj):
+                            d[arg] = [v.dump() for v in obj]
+                        else:
+                            d[arg] = [v for v in obj]
+                    else:
+                        d[arg] = []
                 else:
                     d[arg] = getattr(self, arg)
 
@@ -80,8 +88,13 @@ class Tobj(object):
                     setattr(tobj, key, obj)
 
                 elif isinstance(meta_obj, ListProperty):
-                    pass
-                
+                    obj_class = meta_obj._key_content_type
+                    if isinstance(obj_class, _BaseProperty):
+                        obj = [obj_class.load(v) for v in value]
+                    else:
+                        obj = [obj_class(v) for v in value]
+                    setattr(tobj, key, obj)
+
                 else:
                     setattr(tobj, key, value)
             
