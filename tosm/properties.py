@@ -154,6 +154,10 @@ class ListProperty(_BaseProperty):
 
         #TODO: how to check list content?
 
+        if hasattr(self, '_key_content_type') and value:
+            if not all(map(lambda obj : isinstance(obj, self._key_content_type), value)):
+                raise InvalidArgument()
+
 
 def ObjectListProperty(*kwargs):
     return ListProperty(content_type=ObjectProperty, *kwargs)

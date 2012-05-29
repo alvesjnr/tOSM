@@ -1,5 +1,5 @@
 
-from properties import _BaseProperty, ObjectProperty, ObjectListProperty
+from properties import _BaseProperty, ObjectProperty, ListProperty
 
 
 class _TobjMetaclass(type):
@@ -79,7 +79,7 @@ class Tobj(object):
                     obj = obj_class.load(value)
                     setattr(tobj, key, obj)
 
-                elif isinstance(meta_obj, ObjectListProperty):
+                elif isinstance(meta_obj, ListProperty):
                     pass
                 
                 else:
