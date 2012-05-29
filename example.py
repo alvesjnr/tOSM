@@ -42,7 +42,7 @@ class Address(Tobj):
 class Person(Tobj):
     name = StringProperty()
     tel = PositiveIntegerProperty()
-    address = ObjectProperty(object_type=Address)
+    address = ObjectProperty()
 
 carlos = Person("Carlos", 99887766, Address(number=99, street="Koningstraat"))
 
