@@ -143,5 +143,24 @@ class ObjectProperty(_BaseProperty):
             raise InvalidArgument()
 
 
-class ObjectListProperty(_BaseProperty):
-    pass
+class ListProperty(_BaseProperty):
+
+    _allowed_args = _BaseProperty._allowed_args + ['content_type',]
+    
+    def _implicid_validation(self, value):
+
+        if not isinstance(value, list):
+            raise InvalidArgument()
+
+        #TODO: how to check list content?
+
+
+def ObjectListProperty(*kwargs):
+    return ListProperty(content_type=ObjectProperty, *kwargs)
+
+
+def DefinedObjectListProperty(tobject, *kwargs):
+    if isinstance(tobject, ObjectProperty):
+        return ListProperty(content_type=tobject, *kwargs)
+    else:
+        raise InvalidArgument()
