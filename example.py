@@ -34,22 +34,31 @@ except:
     A more complex example
 """
 
-class Person(Tobj):
-    name = StringProperty()
-    tel = PositiveIntegerProperty()
-    address = ObjectProperty()
-
-
 class Address(Tobj):
     street = StringProperty()
     number = PositiveIntegerProperty()
+
+
+class Person(Tobj):
+    name = StringProperty()
+    tel = PositiveIntegerProperty()
+    address = ObjectProperty(object_type=Address)
 
 carlos = Person("Carlos", 99887766, Address(number=99, street="Koningstraat"))
 
 dumped = carlos.dump()
 print dumped
+"""
+    Shoudl print something like that:
+
+{'tel': 99887766, 'name': 'Carlos', 'address': {'street': 'Koningstraat', 'number': 99}}
+"""
 
 recreated_carlos = Person.load(dumped)
 
 print recreated_carlos.dump()
-
+"""
+    Again, the same value:
+    
+{'tel': 99887766, 'name': 'Carlos', 'address': {'street': 'Koningstraat', 'number': 99}}
+"""
