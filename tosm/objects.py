@@ -1,8 +1,8 @@
 
-from properties import _BaseProperty
+from properties import _BaseProperty, ObjectProperty
 
 
-class TobjMetaclass(type):
+class _TobjMetaclass(type):
 
     def __new__(cls, name, bases, dct):
 
@@ -18,12 +18,12 @@ class TobjMetaclass(type):
                     '_consecutive_arguments': [name for i,name in consecutive],
                     })
 
-        return super(TobjMetaclass, cls).__new__(cls, name, bases, dct)
+        return super(_TobjMetaclass, cls).__new__(cls, name, bases, dct)
 
 
 class Tobj(object):
 
-    __metaclass__ = TobjMetaclass
+    __metaclass__ = _TobjMetaclass
 
     def __init__(self, *args, **kwargs):
         
@@ -49,8 +49,22 @@ class Tobj(object):
             Convert it from object to structure
         """
 
+        d = {}
+
+        for arg in self._consecutive_arguments:
+            if hasattr(self, arg):
+                obj = getattr(self, arg)
+
+                if isinstance(obj, Tobj):
+                    d[arg] = obj.dump()
+                else:
+                    d[arg] = getattr(self, arg)
+
+        return d
+
     @classmethod
     def load(cls, raw):
         """ 
             Recreate a tOSM object based on a structure
         """
+        

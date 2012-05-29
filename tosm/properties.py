@@ -4,7 +4,7 @@ import types
 from t_exceptions import KeylessArgError, NotAllowedArgument, InvalidKeyValueError, InvalidArgument
 
 
-class NumberedProperty(object):
+class _OrderedProperty(object):
     
     counter = 0
 
@@ -20,7 +20,7 @@ class _BaseProperty(object):
 
     def __init__(self, default=None, *args, **kwargs):
 
-        self._property_index = NumberedProperty.get_counter_and_increment()
+        self._property_index = _OrderedProperty.get_counter_and_increment()
         
         if args:
             raise KeylessArgError()
@@ -126,3 +126,12 @@ class PositiveIntegerProperty(IntegerProperty):
         if hasattr(self, _key_max) and self._key_max < 0:
             raise InvalidKeyValueError()
 
+
+class ObjectProperty(_BaseProperty):
+
+    def _implicid_validation(self, value):
+        
+        from objects import Tobj    #FIXME: inside-objects imports are not a good idea!
+        
+        if not isinstance(value, Tobj):
+            raise InvalidArgument()
