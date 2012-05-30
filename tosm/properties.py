@@ -185,7 +185,7 @@ class GenericObjectProperty(_BaseProperty):
 
     _allowed_args = _BaseProperty._allowed_args + ['object_type',]
 
-    def _implicid_validation(value):
+    def _implicid_validation(self, value):
 
         if hasattr(self,'_key_object_type'):
             if not isinstance(value, self._key_object_type):
@@ -195,7 +195,6 @@ class GenericObjectProperty(_BaseProperty):
 class ObjectProperty(GenericObjectProperty):
 
     def __set__(self, instance, value):
-        
         super(ObjectProperty, self).__set__(instance, value)
 
         self._key_object_type = type(value)

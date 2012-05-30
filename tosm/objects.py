@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import pickle
+
 from properties import _BaseProperty, ObjectProperty, ListProperty
 from t_exceptions import UnexpectedArgumentError
 
@@ -90,7 +92,7 @@ class Tobj(object):
                     else:
                         d[arg] = []
                 else:
-                    d[arg] = getattr(self, arg)
+                    d[arg] = obj
 
         return d
 

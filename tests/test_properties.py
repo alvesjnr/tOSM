@@ -94,5 +94,21 @@ class TestIntegerProperty(unittest.TestCase):
         self.assertTrue(a.value == 88)
 
 
+class TestObjectsProperty(unittest.TestCase):
+
+    def test_a_dump(self):
+        class O(object):
+            def __init__(self, name="Paul Potts", age=99):
+                self.name = name
+                self.age = age
+            def __repr__(self):
+                return '<%s, %s>' % (self.name, self.age)
+        class A(Tobj):
+            obj = GenericObjectProperty(object_type=O)
+
+        a = A(O())
+        print a.dump()
+
+
 if __name__ == '__main__':
     unittest.main()
