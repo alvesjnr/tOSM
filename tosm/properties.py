@@ -181,13 +181,24 @@ class BooleanProperty(_BaseProperty):
             raise InvalidArgument("Argument %s type is not Boolean.")
 
 
-class ObjectProperty(_BaseProperty):
+class GenericObjectProperty(_BaseProperty):
+
+    _allowed_args = _BaseProperty._allowed_args + ['object_type',]
+
+    def _implicid_validation(value):
+
+        if hasattr(self,'_key_object_type'):
+            if not isinstance(value, self._key_object_type):
+                raise InvalidArgument("Argument %s is not an valid %s instance." % (value, Tobj))
+
+
+class ObjectProperty(GenericObjectProperty):
 
     def __set__(self, instance, value):
         
         super(ObjectProperty, self).__set__(instance, value)
 
-        self._object_definition = type(value)
+        self._key_object_type = type(value)
 
     def _implicid_validation(self, value):
         

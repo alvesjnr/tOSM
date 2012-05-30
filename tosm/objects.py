@@ -107,7 +107,7 @@ class Tobj(object):
                 meta_obj = cls.__getattribute__(cls,key)
                 
                 if isinstance(meta_obj, ObjectProperty):
-                    obj_class = meta_obj._object_definition
+                    obj_class = meta_obj._key_object_type
                     obj = obj_class.load(value)
                     setattr(tobj, key, obj)
 
