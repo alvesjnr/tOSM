@@ -18,7 +18,7 @@ class Telephone(Tobj):
 class SimplePerson(Tobj):
     name = StringProperty()
     address = ObjectProperty()
-    
+
 
 class Person(SimplePerson):
     tel = ListProperty()
@@ -61,6 +61,7 @@ class TestRelationship(unittest.TestCase):
                            'tel':[{'tpe':'cel', 'number':123},
                                   {'tpe':'house', 'number':777}],
                            }
+                           
         self.assertTrue(p.dump() == expected_struct)
 
     def test_c_inheritance_with_ordered_args(self):
@@ -75,6 +76,7 @@ class TestRelationship(unittest.TestCase):
                            'tel':[{'tpe':'cel', 'number':123},
                                   {'tpe':'house', 'number':777}],
                            }
+
         self.assertTrue(p.dump() == expected_struct)
         
 if __name__=='__main__':
