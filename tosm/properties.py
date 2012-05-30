@@ -16,7 +16,7 @@ class _OrderedProperty(object):
 
 class _BaseProperty(object):
     
-    _allowed_args = ['doc','validator']
+    _allowed_args = ['doc', 'validator']
 
     def __init__(self, default=None, *args, **kwargs):
 
@@ -33,7 +33,7 @@ class _BaseProperty(object):
         
         self._key_meta_validation()
 
-        if default:
+        if default is not None:
             self._validate(default)
             self._implicid_validation(default)
             self._default_value = default
@@ -56,11 +56,10 @@ class _BaseProperty(object):
 
     def __get__(self, instance, cls):
         
-        if hasattr(instance, self.attr_name):
+        if hasattr(self, 'attr_name') and hasattr(instance, self.attr_name):
             return getattr(instance, self.attr_name)
-        elif hasattr(instance, '_default_value'):
-            return instance._default_value
-
+        elif hasattr(self, '_default_value'):
+            return self._default_value
 
     def __set__(self, instance, value):
         self._implicid_validation(value)
