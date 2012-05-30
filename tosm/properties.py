@@ -223,13 +223,13 @@ class ListProperty(_BaseProperty):
                 raise InvalidArgument()
 
 
-def ObjectListProperty(*kwargs):
+def ObjectListProperty(**kwargs):
     return ListProperty(content_type=ObjectProperty, *kwargs)
 
 
-def DefinedObjectListProperty(tobject, *kwargs):
+def DefinedObjectListProperty(content_type, **kwargs):
     from objects import Tobj
-    if issubclass(tobject, Tobj):
-        return ListProperty(content_type=tobject, *kwargs)
+    if issubclass(content_type, Tobj):
+        return ListProperty(content_type=content_type, *kwargs)
     else:
         raise InvalidArgument()
