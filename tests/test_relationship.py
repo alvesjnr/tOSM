@@ -61,6 +61,7 @@ class TestRelationship(unittest.TestCase):
                            'tel':[{'tpe':'cel', 'number':123},
                                   {'tpe':'house', 'number':777}],
                            }
-        # import pdb; pdb.set_trace()
         self.assertTrue(p.dump() == expected_struct)
         
+if __name__=='__main__':
+    unittest.main()

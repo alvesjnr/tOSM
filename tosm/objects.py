@@ -7,31 +7,26 @@ class _TobjMetaclass(type):
 
     def __new__(cls, name, bases, dct):
 
+        for base in bases:
+            for key, value in base.__dict__.items():
+                if isinstance(value,_BaseProperty):
+                    dct[key] = base.__dict__[key]
+
         prop = {}
-        consecutive = []
         for key,value in dct.items():
             if isinstance(value, _BaseProperty):
                 prop[key] = (value.__class__, value._property_index)
-                consecutive.append((value._property_index,key))
 
-        consecutive.sort(key=lambda a : a[0])
+        consecutive_arguments = [(key,value[1]) for key,value in prop.items()]
+        consecutive_arguments.sort(key=lambda a : a[1])
+        consecutive_arguments = [arg for arg,i in consecutive_arguments]
 
-        #FIXME: The idea works, but PLEASE: refactory it!
-        parent_classes_properties = {}
-        parent_classes_arguments = []
-        for base in bases:
-            if hasattr(base, '_consecutive_arguments'):
-                parent_classes_arguments += base._consecutive_arguments
-            if hasattr(base, '_tosm_properties'):
-                parent_classes_properties.update(base._tosm_properties)
-
-        prop.update(parent_classes_properties)
         dct.update({'_tosm_properties': prop,
-                    '_consecutive_arguments': parent_classes_arguments + [name for i,name in consecutive],
+                    '_consecutive_arguments': consecutive_arguments,
                     })
-
+        
         return super(_TobjMetaclass, cls).__new__(cls, name, bases, dct)
-
+    
 
 class Tobj(object):
 
