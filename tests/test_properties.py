@@ -1,6 +1,6 @@
 
 # tOSM - Tiny Object to Structure Modeller
-# Copyright (C) 2012  - Antonio Ribeiro Alves Júnior
+# Copyright (C) 2012 - Antonio Ribeiro Alves Junior
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
