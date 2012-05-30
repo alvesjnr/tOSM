@@ -62,6 +62,20 @@ class TestRelationship(unittest.TestCase):
                                   {'tpe':'house', 'number':777}],
                            }
         self.assertTrue(p.dump() == expected_struct)
+
+    def test_c_inheritance_with_ordered_args(self):
+        a = Address('Koningstraat', 18)
+        t1 = Telephone('cel', 123)
+        t2 = Telephone('house', 777)
+        p = Person("Donald Otello", a, [t1, t2])
+
+        expected_struct = {'name':'Donald Otello',
+                           'address':{'street':'Koningstraat',
+                                      'number':18},
+                           'tel':[{'tpe':'cel', 'number':123},
+                                  {'tpe':'house', 'number':777}],
+                           }
+        self.assertTrue(p.dump() == expected_struct)
         
 if __name__=='__main__':
     unittest.main()
