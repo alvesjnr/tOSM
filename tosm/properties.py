@@ -41,7 +41,7 @@ class _BaseProperty(object):
     def _implicid_validation(self, value):
         """
             The implicid validation uses general keys to valid the property
-            Examples of keys are: max, min, validation_function, etc.
+            Examples of keys are: max, min, etc.
             Available keys may change from one property to another, check the 
             API reference for valid keys for each property
         """
@@ -85,13 +85,13 @@ class StringProperty(_BaseProperty):
             raise InvalidArgument()
 
 
-class IntegerProperty(_BaseProperty):
+class NumberProperty(_BaseProperty):
 
     _allowed_args = _BaseProperty._allowed_args + ['min', 'max']
 
     def _implicid_validation(self, value):
         
-        if not isinstance(value, types.IntType):
+        if not isinstance(value, (types.IntType, types.FloatType)):
             raise InvalidArgument()
 
         if hasattr(self, '_key_max') and value > self._key_max:
@@ -107,24 +107,62 @@ class IntegerProperty(_BaseProperty):
                 raise InvalidKeyValueError()
 
 
-class PositiveIntegerProperty(IntegerProperty):
-
+class PositiveNumberProperty(NumberProperty):
+    
     def _implicid_validation(self, value):
 
-        super(PositiveIntegerProperty,self)._implicid_validation(value)
-        
         if value < 0:
             raise InvalidArgument()
 
-    def _key_meta_validation(self):
+        super(PositiveNumberProperty, self)._implicid_validation(value)
 
-        super(PositiveIntegerProperty, self)._key_meta_validation()
+    def _key_meta_validation(self):
 
         if hasattr(self,'_key_min') and self._key_min < 0:
             raise InvalidKeyValueError()
         
         if hasattr(self, '_key_max') and self._key_max < 0:
             raise InvalidKeyValueError()
+        
+        super(PositiveNumberProperty, self)._key_meta_validation()
+
+
+class IntegerProperty(NumberProperty):
+
+    def _implicid_validation(self, value):
+        
+        if not isinstance(value, types.IntType):
+            raise InvalidArgument()
+
+        super(IntegerProperty, self)._implicid_validation(value)
+
+
+class PositiveIntegerProperty(IntegerProperty):
+
+    def _implicid_validation(self, value):
+
+        if value < 0:
+            raise InvalidArgument()
+
+        super(PositiveIntegerProperty,self)._implicid_validation(value)
+
+    def _key_meta_validation(self):
+
+        if hasattr(self,'_key_min') and self._key_min < 0:
+            raise InvalidKeyValueError()
+        
+        if hasattr(self, '_key_max') and self._key_max < 0:
+            raise InvalidKeyValueError()
+        
+        super(PositiveIntegerProperty, self)._key_meta_validation()
+
+
+class BooleanProperty(_BaseProperty):
+    
+    def _implicid_validation(self, value):
+
+        if not isinstance(value, types.BooleanType):
+            raise InvalidArgument()
 
 
 class ObjectProperty(_BaseProperty):
