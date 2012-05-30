@@ -34,7 +34,7 @@ class _BaseProperty(object):
         self._key_meta_validation()
 
         if default is not None:
-            self._validate(default)
+            self.__validate(default)
             self._implicid_validation(default)
             self._default_value = default
 
@@ -46,7 +46,7 @@ class _BaseProperty(object):
             API reference for valid keys for each property
         """
 
-    def _validate(self, value):
+    def __validate(self, value):
         """
             The validate function is a wrapper to the externally provided
             validation function
@@ -63,7 +63,7 @@ class _BaseProperty(object):
 
     def __set__(self, instance, value):
         self._implicid_validation(value)
-        self._validate(value)
+        self.__validate(value)
 
         for attr_name, attr_value in instance.__class__.__dict__.items():
             if attr_value == self:
