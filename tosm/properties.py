@@ -144,7 +144,6 @@ class ObjectProperty(_BaseProperty):
             raise InvalidArgument()
 
 
-
 class _TosmList(list):
     
     def __init__(self, *args, **kwargs):
@@ -160,6 +159,12 @@ class _TosmList(list):
             if not isinstance(value, self._content_type):
                 raise InvalidArgument()
         super(_TosmList, self).append(value)
+
+    def insert(self, index, value):
+        if hasattr(self, '_content_type'):
+            if not isinstance(value, self._content_type):
+                raise InvalidArgument()
+        super(_TosmList, self).insert(value)
 
 
 class ListProperty(_BaseProperty):
