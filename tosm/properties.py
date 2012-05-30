@@ -82,7 +82,7 @@ class StringProperty(_BaseProperty):
     def _implicid_validation(self, value):
 
         if not isinstance(value, basestring):
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s is not a basestring subtype" % value)
 
 
 class NumberProperty(_BaseProperty):
@@ -92,37 +92,37 @@ class NumberProperty(_BaseProperty):
     def _implicid_validation(self, value):
         
         if not isinstance(value, (types.IntType, types.FloatType)):
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s is not a valid number" % value)
 
         if hasattr(self, '_key_max') and value > self._key_max:
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s is grater than maximum allowed value %f." % (value, self._key_max))
 
         if hasattr(self, '_key_min') and value < self._key_min:
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s is lower than minimum allowed value %f." % (value, self._key_min))
 
     def _key_meta_validation(self):
 
         if hasattr(self, '_key_max') and hasattr(self, '_key_min'):
             if self._key_max <= self._key_min:
-                raise InvalidKeyValueError()
+                raise InvalidKeyValueError("Key 'max' must be greater than key 'min'.")
 
 
 class PositiveNumberProperty(NumberProperty):
     
     def _implicid_validation(self, value):
 
-        if value < 0:
-            raise InvalidArgument()
-
         super(PositiveNumberProperty, self)._implicid_validation(value)
+
+        if value < 0:
+            raise InvalidArgument("Argument %f must be a positive value")
 
     def _key_meta_validation(self):
 
         if hasattr(self,'_key_min') and self._key_min < 0:
-            raise InvalidKeyValueError()
+            raise InvalidKeyValueError("Key 'min' must be a positive value.")
         
         if hasattr(self, '_key_max') and self._key_max < 0:
-            raise InvalidKeyValueError()
+            raise InvalidKeyValueError("Key 'max' must be a positive value.")
         
         super(PositiveNumberProperty, self)._key_meta_validation()
 
@@ -132,7 +132,7 @@ class IntegerProperty(NumberProperty):
     def _implicid_validation(self, value):
         
         if not isinstance(value, types.IntType):
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s value is not an integer number.")
 
         super(IntegerProperty, self)._implicid_validation(value)
 
@@ -141,18 +141,18 @@ class PositiveIntegerProperty(IntegerProperty):
 
     def _implicid_validation(self, value):
 
-        if value < 0:
-            raise InvalidArgument()
-
         super(PositiveIntegerProperty,self)._implicid_validation(value)
+
+        if value < 0:
+            raise InvalidArgument("Argument %i is not an positive integer" % value)
 
     def _key_meta_validation(self):
 
         if hasattr(self,'_key_min') and self._key_min < 0:
-            raise InvalidKeyValueError()
+            raise InvalidKeyValueError("Key 'min' must be a positive value.")
         
         if hasattr(self, '_key_max') and self._key_max < 0:
-            raise InvalidKeyValueError()
+            raise InvalidKeyValueError("Key 'max' must be a positive value.")
         
         super(PositiveIntegerProperty, self)._key_meta_validation()
 
@@ -162,7 +162,7 @@ class BooleanProperty(_BaseProperty):
     def _implicid_validation(self, value):
 
         if not isinstance(value, types.BooleanType):
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s type is not Boolean.")
 
 
 class ObjectProperty(_BaseProperty):
@@ -178,7 +178,7 @@ class ObjectProperty(_BaseProperty):
         from objects import Tobj    #FIXME: inside-objects imports are not a good idea!
         
         if not isinstance(value, Tobj):
-            raise InvalidArgument()
+            raise InvalidArgument("Argument %s is not an valid %s instance." % (value, Tobj))
 
 
 class _TosmList(list):
