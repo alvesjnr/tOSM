@@ -54,7 +54,6 @@ class TestDumpLoad(unittest.TestCase):
             l = ListProperty(content_type=B)
 
         struct = {'l':[{'p':9},{'p':-8},{'p':0}]}
-
         a = A.load(struct)
         self.assertTrue(a.dump() == struct)
 
@@ -106,7 +105,6 @@ class TestRelationship(unittest.TestCase):
                          {'tpe':'house', 'number':777}],
                   }
         p = Person.load(struct)
-        import pdb; pdb.set_trace()
         pass
         
 if __name__=='__main__':

@@ -97,7 +97,7 @@ class Tobj(object):
 
                 elif isinstance(meta_obj, ListProperty):
                     obj_class = meta_obj._key_content_type
-                    if isinstance(obj_class, _BaseProperty):
+                    if issubclass(obj_class, Tobj):
                         obj = [obj_class.load(v) for v in value]
                     else:
                         obj = [obj_class(v) for v in value]
