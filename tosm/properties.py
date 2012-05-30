@@ -29,7 +29,7 @@ class _BaseProperty(object):
             if key in self._allowed_args:
                 setattr(self, "_key_"+key, value)
             else:
-                raise NotAllowedArgument()
+                raise NotAllowedArgument(key)
         
         self._key_meta_validation()
 

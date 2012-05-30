@@ -21,11 +21,11 @@ class SimplePerson(Tobj):
 
 
 class Person(SimplePerson):
-    tel = ListProperty()
+    tel = ListProperty(content_type=Telephone)
 
 
 class Contacts(Tobj):
-    people = ListProperty()
+    people = ListProperty(content_type=Person)
 
 
 class TestDumpLoad(unittest.TestCase):
@@ -38,6 +38,25 @@ class TestDumpLoad(unittest.TestCase):
         t = Telephone.load({'tpe':'cel', 'number':99980})
         self.assertTrue(t.tpe == 'cel')
         self.assertTrue(t.number == 99980)
+
+    def test_c_load_list(self):
+        class A(Tobj):
+            s = ListProperty(content_type=str)
+
+        struct = {'s':['1','a','9.9']}
+        a = A.load(struct)
+        self.assertTrue(a.dump() == {'s':['1','a','9.9']})
+
+    def test_d_load_list_of_objects(self):
+        class B(Tobj):
+            p = IntegerProperty()
+        class A(Tobj):
+            l = ListProperty(content_type=B)
+
+        struct = {'l':[{'p':9},{'p':-8},{'p':0}]}
+
+        a = A.load(struct)
+        self.assertTrue(a.dump() == struct)
 
 
 class TestRelationship(unittest.TestCase):
@@ -61,7 +80,7 @@ class TestRelationship(unittest.TestCase):
                            'tel':[{'tpe':'cel', 'number':123},
                                   {'tpe':'house', 'number':777}],
                            }
-                           
+
         self.assertTrue(p.dump() == expected_struct)
 
     def test_c_inheritance_with_ordered_args(self):
@@ -78,6 +97,17 @@ class TestRelationship(unittest.TestCase):
                            }
 
         self.assertTrue(p.dump() == expected_struct)
+
+    def test_d_load(self):
+        struct = {'name':'Donald Otello',
+                  'address':{'street':'Koningstraat',
+                             'number':18},
+                  'tel':[{'tpe':'cel', 'number':123},
+                         {'tpe':'house', 'number':777}],
+                  }
+        p = Person.load(struct)
+        import pdb; pdb.set_trace()
+        pass
         
 if __name__=='__main__':
     unittest.main()
