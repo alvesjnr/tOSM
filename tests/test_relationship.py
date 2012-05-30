@@ -97,7 +97,7 @@ class TestRelationship(unittest.TestCase):
 
         self.assertTrue(p.dump() == expected_struct)
 
-    def test_d_load(self):
+    def test_d1_load(self):
         struct = {'name':'Donald Otello',
                   'address':{'street':'Koningstraat',
                              'number':18},
@@ -105,7 +105,32 @@ class TestRelationship(unittest.TestCase):
                          {'tpe':'house', 'number':777}],
                   }
         p = Person.load(struct)
-        pass
+        self.assertTrue(p.dump() == struct)
+
+    def testd_d2_load(self):
+        struct = {'people':[{'name':'Donald Otello',
+                               'address':{'street':'Koningstraat',
+                                          'number':18},
+                               'tel':[{'tpe':'cel', 'number':12},
+                                      {'tpe':'house', 'number':777}],
+                               },
+                               {'name':'Michel Angelo',
+                               'address':{'street':'Danport',
+                                          'number':1998},
+                               'tel':[{'tpe':'cel', 'number':222},
+                                      {'tpe':'house', 'number':978}],
+                               },
+                               {'name':'Poc a Hontas',
+                               'address':{'street':'Sint Pieters',
+                                          'number':33},
+                               'tel':[{'tpe':'cel', 'number':654},
+                                      {'tpe':'house', 'number':123}],
+                               },
+                               ]
+                    }
+        p = Contacts.load(struct)
+        self.assertTrue(p.dump() == struct)
+
         
 if __name__=='__main__':
     unittest.main()
