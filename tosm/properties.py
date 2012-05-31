@@ -189,7 +189,7 @@ class GenericObjectProperty(_BaseProperty):
 
         if hasattr(self,'_key_object_type'):
             if not isinstance(value, self._key_object_type):
-                raise InvalidArgument("Argument %s is not an valid %s instance." % (value, Tobj))
+                raise InvalidArgument("Argument %s is not an valid argument." % value)
 
 
 class ObjectProperty(GenericObjectProperty):

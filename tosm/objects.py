@@ -92,7 +92,10 @@ class Tobj(object):
                     else:
                         d[arg] = []
                 else:
-                    d[arg] = obj
+                    if isinstance(obj, (int, float, bool, str)) or obj is None:
+                        d[arg] = obj
+                    else:
+                        d[arg] = repr(obj)
 
         return d
 
@@ -122,7 +125,10 @@ class Tobj(object):
                     setattr(tobj, key, obj)
 
                 else:
-                    setattr(tobj, key, value)
+                    if isinstance(meta_obj, (int, float, bool, str)):
+                        setattr(tobj, key, value)
+                    elif hasattr(meta_obj,'load'):
+                        setattr(tobj, key, meta_obj.load(value))
             
             else:
                 raise UnexpectedArgumentError()

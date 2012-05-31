@@ -96,7 +96,8 @@ class TestIntegerProperty(unittest.TestCase):
 
 class TestObjectsProperty(unittest.TestCase):
 
-    def test_a_dump(self):
+    @staticmethod
+    def get_generic_class():
         class O(object):
             def __init__(self, name="Paul Potts", age=99):
                 self.name = name
@@ -106,8 +107,20 @@ class TestObjectsProperty(unittest.TestCase):
         class A(Tobj):
             obj = GenericObjectProperty(object_type=O)
 
+        return O,A
+
+    def test_a_dump_generic_object(self):
+        O,A = self.get_generic_class()
+
         a = A(O())
-        print a.dump()
+        self.assertTrue(a.dump() == {'obj':'<Paul Potts, 99>'})
+
+    def test_b_load_generic_object(self):
+        O,A = self.get_generic_class()
+        struct = {'obj':'<Paul Potts, 99>'}
+
+        a = A.load(struct)
+        self.assertTrue(a.dump() == {'obj':None})
 
 
 if __name__ == '__main__':
