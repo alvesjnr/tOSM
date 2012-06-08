@@ -108,7 +108,6 @@ class Tobj(object):
 
         for key,value in raw.items():
             if key in tobj._tosm_properties:
-
                 meta_obj = cls.__getattribute__(cls,key)
                 
                 if isinstance(meta_obj, ObjectProperty):

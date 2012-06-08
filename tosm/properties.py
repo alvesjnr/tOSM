@@ -81,11 +81,12 @@ class _BaseProperty(object):
         self._implicid_validation(value)
         self.__validate(value)
 
-        for attr_name, attr_value in instance.__class__.__dict__.items():
-            if attr_value == self:
-                self.attr_name = '_attributename_'+attr_name
-                setattr(instance, self.attr_name, value)
-                break
+        if not hasattr(self, 'attr_name'):
+            for attr_name, attr_value in instance.__class__.__dict__.items():
+                if attr_value == self:
+                    self.attr_name = '_attributename_'+attr_name
+                    break
+        setattr(instance, self.attr_name, value)
     
     def _key_meta_validation(self):
         """
