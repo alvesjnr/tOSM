@@ -17,7 +17,7 @@
 
 import types
 
-from t_exceptions import KeylessArgError, NotAllowedArgument, InvalidKeyValueError, InvalidArgument
+from t_exceptions import *
 
 
 class _OrderedProperty(object):
@@ -34,9 +34,14 @@ class _BaseProperty(object):
     
     _allowed_args = ['doc', 'validator']
 
-    def __init__(self, default=None, *args, **kwargs):
+    def __init__(self, default=None, required=False, *args, **kwargs):
 
         self._property_index = _OrderedProperty.get_counter_and_increment()
+
+        if required not in (True, False):
+            raise MiscError("'required' argument must be True or False.")
+        else:
+            self.required_property = required
         
         if args:
             raise KeylessArgError()
@@ -93,6 +98,7 @@ class _BaseProperty(object):
             This method valid if the key arguments are valid as keys
             For instance, if checks if key max isn't less or equal than key min
         """
+
 
 class StringProperty(_BaseProperty):
 

@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from properties import _BaseProperty, ObjectProperty, ListProperty
-from t_exceptions import UnexpectedArgumentError
+from t_exceptions import UnexpectedArgumentError, MiscError
 
 
 class _TobjMetaclass(type):
@@ -52,6 +52,12 @@ class Tobj(object):
     def __init__(self, *args, **kwargs):
         
         self._set_consecutive_arguments(args)
+
+        for prop_name in self._consecutive_arguments[len(args):]:
+            prop = self.__class__.__getattribute__(self.__class__,prop_name)
+            if prop.required_property:
+                if not prop_name in kwargs.keys():
+                    raise MiscError("Missing required value: '%s'" % prop_name)
 
         for key,value in kwargs.items():
             if key in self._tosm_properties:

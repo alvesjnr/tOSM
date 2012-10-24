@@ -1,0 +1,16 @@
+Metadata-Version: 1.0
+Name: tOSM-Tiny-Object-to-Structure-Modeller
+Version: 0.0.1
+Summary: Tiny object to structure modeller.
+Home-page: https://github.com/alvesjnr/tOSM
+Author: Antonio Ribeiro
+Author-email: alvesjunior.antonio@gmail.com
+License: GPL
+Description: tOSM - Tiny Object to Structure Modeller
+        =========================================
+        
+        tOSM is a very simple way to map Object Oriented code through a structured format. The main purpose of tOSM is to teach the usage of some Python concepts (as properties, metaclaseses, etc.) and also walk thorugh the API design concepts in Python
+        
+        
+        
+Platform: UNKNOWN

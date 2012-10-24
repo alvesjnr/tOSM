@@ -21,6 +21,9 @@ class _BaseTosmException(BaseException):
         Just a plcaeholder
     """
 
+class MiscError(_BaseTosmException):
+    """An error hapened!"""
+
 class KeylessArgError(_BaseTosmException):
     """ Property accepts only key arguments """
 
