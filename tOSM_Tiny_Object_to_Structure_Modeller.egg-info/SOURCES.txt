@@ -1,9 +1,0 @@
-setup.py
-tOSM_Tiny_Object_to_Structure_Modeller.egg-info/PKG-INFO
-tOSM_Tiny_Object_to_Structure_Modeller.egg-info/SOURCES.txt
-tOSM_Tiny_Object_to_Structure_Modeller.egg-info/dependency_links.txt
-tOSM_Tiny_Object_to_Structure_Modeller.egg-info/top_level.txt
-tosm/__init__.py
-tosm/objects.py
-tosm/properties.py
-tosm/t_exceptions.py
