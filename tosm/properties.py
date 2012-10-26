@@ -231,7 +231,18 @@ class ListProperty(_BaseProperty):
 
     _allowed_args = _BaseProperty._allowed_args + ['content_type',]
 
+    def __init__(self, *args, **kwargs):
+
+        if 'content_type' in kwargs:
+            kwargs['default'] = _TosmList(content_type=kwargs['content_type'])
+        else:
+            kwargs['default'] = []
+        super(ListProperty,self).__init__(*args, **kwargs)
+
     def __set__(self, instance, value):
+        if not isinstance(value, (tuple, list)):
+            raise InvalidArgument("Argument '%s' must be a sequence, not %s" % (value,type(value)))
+
         if hasattr(self, '_key_content_type'):
             value = _TosmList(*value, content_type=self._key_content_type)
         super(ListProperty, self).__set__(instance, value)

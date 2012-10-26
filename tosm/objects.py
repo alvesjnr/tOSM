@@ -27,7 +27,8 @@ class _TobjMetaclass(type):
             for key, value in base.__dict__.items():
                 if isinstance(value,_BaseProperty):
                     dct[key] = base.__dict__[key]
-                    delattr(base, key)
+                    # WARNING! potential bug!
+                    # delattr(base, key)
 
         prop = {}
         for key,value in dct.items():
