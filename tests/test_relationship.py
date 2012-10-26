@@ -147,6 +147,42 @@ class TestRelationship(unittest.TestCase):
         p = Contacts.load(struct)
         self.assertTrue(p.dump() == struct)
 
+
+class OtherPerson(Tobj):
+    name = StringProperty()
+    age = PositiveIntegerProperty()
+
+
+class Student(OtherPerson):
+    course = StringProperty()
+
+
+class Professor(OtherPerson):
+    salary = PositiveNumberProperty()
+
+
+class Director(Professor):
+    institute = StringProperty()
+
+
+class TestMultipleInheritance(unittest.TestCase):
+
+    def test_a_people(self):
+        p = OtherPerson(name="Carlos", age=22)
+        self.assertTrue(p.dump() == {'name':'Carlos', 'age':22})
+
+    def test_b_student(self):
+        s = Student(name="Carlos", age=22, course="fotonica")
+        self.assertTrue(s.dump() == {'name':'Carlos', 'age':22, 'course':'fotonica'})
+
+    def test_c_professor(self):
+        p = Professor(name="Fernando", age=77, salary=1000)
+        self.assertTrue(p.dump() == {'name':'Fernando', 'age':77, 'salary':1000})
+
+    def test_d_director(self):
+        p = Director(name="Fernando", age=77, salary=1000, institute="Math")
+        self.assertTrue(p.dump() == {'name':'Fernando', 'age':77, 'salary':1000, 'institute':'Math'})
+
         
 if __name__=='__main__':
     unittest.main()

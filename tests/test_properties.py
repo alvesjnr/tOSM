@@ -94,5 +94,52 @@ class TestIntegerProperty(unittest.TestCase):
         self.assertTrue(a.value == 88)
 
 
+
+class TestListProperty(unittest.TestCase):
+
+    @staticmethod
+    def get_class_a():
+        class A(Tobj):
+            values = ListProperty()
+
+        return A()
+
+    @staticmethod
+    def get_class_b():
+        class B(Tobj):
+            values = ListProperty(content_type=str)
+
+        return B()
+
+    def test_a_default_value(self):
+        a = self.get_class_a()
+        self.assertTrue(a.values == [])
+
+    def test_b_add_things_to_list(self):
+        a = self.get_class_a()
+        for i in range(10):
+            a.values.append(i)
+        self.assertTrue(a.values == range(10))
+
+    def test_c_add_correct_type_value(self):
+        b = self.get_class_b()
+        for i in range(10):
+            b.values.append(str(i))
+        self.assertTrue(b.values == [str(i) for i in range(10)])
+
+    def test_d_add_incorrect_type_value(self):
+        b = self.get_class_b()
+        self.assertRaises(InvalidArgument,b.values.append,10)
+
+    def test_e_check_content_type(self):
+        class E(Tobj):
+            l = ListProperty(content_type=str)
+
+        self.assertTrue(E(l=['1']).dump() == {'l':['1']})
+        self.assertRaises(InvalidArgument,E,['1',2])
+        self.assertRaises(InvalidArgument, E, 12)
+        self.assertRaises(InvalidArgument, E, [12])
+
+
 if __name__ == '__main__':
     unittest.main()
